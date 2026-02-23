@@ -21,14 +21,17 @@
             align-items: center;
             position: relative;
             overflow-x: hidden;
+            padding: 20px;
         }
 
         /* Анимированные звезды на фоне */
         body::before {
             content: '';
-            position: absolute;
+            position: fixed;
             width: 100%;
             height: 100%;
+            top: 0;
+            left: 0;
             background: radial-gradient(2px 2px at 20px 30px, #fff, rgba(0,0,0,0)),
                         radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
                         radial-gradient(2px 2px at 80px 120px, #fff, rgba(0,0,0,0)),
@@ -41,6 +44,89 @@
             background-repeat: repeat;
             opacity: 0.3;
             animation: stars 200s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Контейнер для салютов */
+        .fireworks-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+            overflow: hidden;
+        }
+
+        /* Стили для салютов */
+        .firework {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: firework 1s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes firework {
+            0% {
+                transform: translate(var(--x), var(--y)) scale(0);
+                opacity: 1;
+                box-shadow: 0 0 0 0 var(--color);
+            }
+            50% {
+                transform: translate(calc(var(--x) + var(--dx)), calc(var(--y) + var(--dy))) scale(1);
+                opacity: 1;
+                box-shadow: 0 0 50px 20px var(--color);
+            }
+            100% {
+                transform: translate(calc(var(--x) + var(--dx) * 2), calc(var(--y) + var(--dy) * 2)) scale(0);
+                opacity: 0;
+                box-shadow: 0 0 0 0 var(--color);
+            }
+        }
+
+        /* Контейнер для эмодзи Деда Гоблина */
+        .emoji-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 3;
+            overflow: hidden;
+        }
+
+        .flying-emoji {
+            position: absolute;
+            font-size: 40px;
+            animation: flyEmoji 3s linear forwards;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+            z-index: 3;
+        }
+
+        @keyframes flyEmoji {
+            0% {
+                transform: translateX(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(var(--distance)) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .left-emoji {
+            left: -50px;
+            --distance: calc(100vw + 100px);
+        }
+
+        .right-emoji {
+            right: -50px;
+            --distance: calc(-100vw - 100px);
         }
 
         @keyframes stars {
@@ -52,18 +138,20 @@
             background: rgba(20, 15, 35, 0.85);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
-            padding: 45px;
-            border-radius: 40px;
+            padding: clamp(20px, 5vw, 45px);
+            border-radius: clamp(20px, 5vw, 40px);
             box-shadow: 0 30px 70px rgba(0, 0, 0, 0.7),
                        0 0 0 2px rgba(155, 93, 229, 0.3) inset,
                        0 0 30px rgba(155, 93, 229, 0.3);
             text-align: center;
-            max-width: 550px;
-            width: 90%;
+            max-width: min(550px, 95%);
+            width: 100%;
             position: relative;
-            z-index: 1;
+            z-index: 10;
             border: 1px solid rgba(255, 255, 255, 0.1);
             animation: glowPulse 3s infinite;
+            margin: auto;
+            transition: all 0.3s ease;
         }
 
         @keyframes glowPulse {
@@ -73,8 +161,8 @@
         }
 
         .character-icon {
-            font-size: 70px;
-            margin-bottom: 15px;
+            font-size: clamp(40px, 10vw, 70px);
+            margin-bottom: clamp(10px, 3vw, 15px);
             filter: drop-shadow(0 0 20px rgba(155, 93, 229, 0.7));
             animation: floatIcon 3s ease-in-out infinite;
         }
@@ -87,8 +175,8 @@
 
         h2 {
             color: #fff;
-            margin-bottom: 15px;
-            font-size: 32px;
+            margin-bottom: clamp(10px, 3vw, 15px);
+            font-size: clamp(24px, 6vw, 32px);
             text-shadow: 0 0 20px rgba(155, 93, 229, 0.5),
                         0 0 40px rgba(155, 93, 229, 0.3);
             letter-spacing: 1px;
@@ -96,33 +184,35 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: 700;
+            line-height: 1.2;
         }
 
         .subtitle {
             color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 30px;
+            margin-bottom: clamp(20px, 5vw, 30px);
             font-style: italic;
-            font-size: 18px;
+            font-size: clamp(16px, 4vw, 18px);
             text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
             position: relative;
+            line-height: 1.4;
         }
 
         .subtitle::before,
         .subtitle::after {
             content: '"';
-            font-size: 24px;
+            font-size: clamp(20px, 5vw, 24px);
             color: #b19cd9;
             opacity: 0.5;
         }
 
         input {
             width: 100%;
-            padding: 18px 20px;
-            margin: 10px 0 25px;
+            padding: clamp(12px, 3vw, 18px) clamp(15px, 4vw, 20px);
+            margin: clamp(5px, 2vw, 10px) 0 clamp(15px, 4vw, 25px);
             background: rgba(255, 255, 255, 0.08);
             border: 2px solid rgba(155, 93, 229, 0.3);
             border-radius: 50px;
-            font-size: 16px;
+            font-size: clamp(14px, 4vw, 16px);
             box-sizing: border-box;
             transition: all 0.3s ease;
             color: #fff;
@@ -147,12 +237,12 @@
         button {
             background: linear-gradient(135deg, #6b46c1 0%, #9b5de5 50%, #b983ff 100%);
             color: white;
-            padding: 18px 30px;
+            padding: clamp(12px, 3vw, 18px) clamp(20px, 5vw, 30px);
             border: none;
             border-radius: 50px;
             cursor: pointer;
             width: 100%;
-            font-size: 20px;
+            font-size: clamp(16px, 5vw, 20px);
             font-weight: 600;
             transition: all 0.3s ease;
             text-transform: uppercase;
@@ -188,15 +278,17 @@
         }
 
         .message {
-            margin-top: 30px;
-            padding: 25px;
-            border-radius: 30px;
+            margin-top: clamp(15px, 4vw, 30px);
+            padding: clamp(15px, 4vw, 25px);
+            border-radius: clamp(15px, 4vw, 30px);
             display: none;
-            font-size: 18px;
+            font-size: clamp(14px, 4vw, 18px);
             line-height: 1.7;
             animation: slideIn 0.5s ease-out;
             position: relative;
             overflow: hidden;
+            max-height: 70vh;
+            overflow-y: auto;
         }
 
         @keyframes slideIn {
@@ -227,15 +319,16 @@
         }
 
         .hint {
-            margin-top: 25px;
+            margin-top: clamp(15px, 4vw, 25px);
             color: rgba(255, 255, 255, 0.4);
-            font-size: 15px;
+            font-size: clamp(12px, 3vw, 15px);
             cursor: help;
             transition: color 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
+            flex-wrap: wrap;
         }
 
         .hint:hover {
@@ -253,8 +346,8 @@
         }
 
         .redirect-message {
-            margin-top: 20px;
-            font-size: 18px;
+            margin-top: clamp(10px, 3vw, 20px);
+            font-size: clamp(14px, 4vw, 18px);
             color: #b19cd9;
             font-weight: bold;
             animation: pulse 1.5s infinite;
@@ -268,12 +361,12 @@
         }
 
         .extra-field {
-            margin-top: 20px;
-            padding-top: 20px;
+            margin-top: clamp(10px, 3vw, 20px);
+            padding-top: clamp(10px, 3vw, 20px);
             border-top: 2px dashed rgba(155, 93, 229, 0.5);
             font-style: italic;
             color: rgba(255, 255, 255, 0.9);
-            font-size: 16px;
+            font-size: clamp(14px, 3.5vw, 16px);
             position: relative;
         }
 
@@ -281,30 +374,32 @@
             font-family: 'Courier New', monospace;
             white-space: pre-line;
             background: rgba(0, 0, 0, 0.3);
-            padding: 15px;
-            border-radius: 20px;
-            margin-top: 15px;
+            padding: clamp(10px, 3vw, 15px);
+            border-radius: clamp(10px, 3vw, 20px);
+            margin-top: clamp(10px, 2vw, 15px);
             color: #b19cd9;
             border: 1px solid rgba(155, 93, 229, 0.3);
-            font-size: 15px;
+            font-size: clamp(12px, 3vw, 15px);
             line-height: 1.8;
             text-shadow: 0 0 5px rgba(155, 93, 229, 0.3);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            word-break: break-word;
         }
 
         .message strong {
-            font-size: 24px;
+            font-size: clamp(18px, 5vw, 24px);
             display: block;
-            margin-bottom: 15px;
+            margin-bottom: clamp(10px, 3vw, 15px);
             color: #fff;
             text-shadow: 0 0 15px rgba(155, 93, 229, 0.5);
+            word-break: break-word;
         }
 
         /* Декоративные элементы */
         .glow {
-            position: absolute;
-            width: 200px;
-            height: 200px;
+            position: fixed;
+            width: min(200px, 40vw);
+            height: min(200px, 40vw);
             background: radial-gradient(circle, rgba(155, 93, 229, 0.2) 0%, transparent 70%);
             border-radius: 50%;
             pointer-events: none;
@@ -325,17 +420,18 @@
 
         @keyframes glowMove {
             from { transform: translate(0, 0) scale(1); }
-            to { transform: translate(50px, 50px) scale(1.2); }
+            to { transform: translate(min(50px, 5vw), min(50px, 5vw)) scale(1.2); }
         }
 
         .sparkle {
-            position: absolute;
+            position: fixed;
             width: 4px;
             height: 4px;
             background: white;
             border-radius: 50%;
             pointer-events: none;
             animation: sparkle 2s infinite;
+            z-index: 1;
         }
 
         @keyframes sparkle {
@@ -343,11 +439,50 @@
             50% { opacity: 1; transform: scale(1); }
             100% { opacity: 0; transform: scale(0); }
         }
+
+        /* Медиа-запросы для дополнительной адаптации */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            .flying-emoji {
+                font-size: 30px;
+            }
+        }
+
+        @media (max-height: 600px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .character-icon {
+                font-size: 40px;
+            }
+            
+            h2 {
+                font-size: 20px;
+            }
+            
+            .message {
+                max-height: 50vh;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="glow glow-1"></div>
     <div class="glow glow-2"></div>
+    
+    <!-- Контейнер для салютов -->
+    <div id="fireworksContainer" class="fireworks-container"></div>
+    
+    <!-- Контейнер для эмодзи Деда Гоблина -->
+    <div id="emojiContainer" class="emoji-container"></div>
     
     <div class="container">
         <div class="character-icon">🎭</div>
@@ -431,6 +566,97 @@
             }
         };
 
+        // Функция для создания салюта
+        function createFirework() {
+            const container = document.getElementById('fireworksContainer');
+            const colors = ['#ff0', '#f0f', '#0ff', '#ff6b6b', '#4ecdc4', '#45b7d1', '#96f0b6', '#f9ca24', '#f0932b', '#eb4d4b'];
+            
+            for (let i = 0; i < 30; i++) {
+                const firework = document.createElement('div');
+                firework.className = 'firework';
+                
+                // Случайная позиция на экране
+                const x = Math.random() * window.innerWidth;
+                const y = Math.random() * window.innerHeight;
+                
+                // Случайное направление
+                const dx = (Math.random() - 0.5) * 400;
+                const dy = (Math.random() - 0.5) * 400;
+                
+                // Случайный цвет
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                firework.style.setProperty('--x', x + 'px');
+                firework.style.setProperty('--y', y + 'px');
+                firework.style.setProperty('--dx', dx + 'px');
+                firework.style.setProperty('--dy', dy + 'px');
+                firework.style.setProperty('--color', color);
+                firework.style.backgroundColor = color;
+                firework.style.left = '0';
+                firework.style.top = '0';
+                firework.style.animationDelay = Math.random() * 0.5 + 's';
+                
+                container.appendChild(firework);
+                
+                // Удаляем салют после анимации
+                setTimeout(() => {
+                    firework.remove();
+                }, 2000);
+            }
+        }
+
+        // Функция для создания летящих эмодзи "тихо"
+        function createFlyingEmojis() {
+            const container = document.getElementById('emojiContainer');
+            const emojis = ['🤫', '🫢', '😶', '🤐', '🫠', '🫡'];
+            
+            // Создаем эмодзи с левой стороны
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const emoji = document.createElement('div');
+                    emoji.className = 'flying-emoji left-emoji';
+                    emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    
+                    // Случайная вертикальная позиция
+                    const top = Math.random() * window.innerHeight;
+                    emoji.style.top = top + 'px';
+                    
+                    // Случайная задержка анимации
+                    emoji.style.animationDelay = Math.random() * 0.5 + 's';
+                    
+                    container.appendChild(emoji);
+                    
+                    // Удаляем после анимации
+                    setTimeout(() => {
+                        emoji.remove();
+                    }, 3500);
+                }, i * 100);
+            }
+            
+            // Создаем эмодзи с правой стороны
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const emoji = document.createElement('div');
+                    emoji.className = 'flying-emoji right-emoji';
+                    emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    
+                    // Случайная вертикальная позиция
+                    const top = Math.random() * window.innerHeight;
+                    emoji.style.top = top + 'px';
+                    
+                    // Случайная задержка анимации
+                    emoji.style.animationDelay = Math.random() * 0.5 + 's';
+                    
+                    container.appendChild(emoji);
+                    
+                    // Удаляем после анимации
+                    setTimeout(() => {
+                        emoji.remove();
+                    }, 3500);
+                }, i * 100);
+            }
+        }
+
         function checkPassword() {
             const input = document.getElementById('passwordInput').value.trim();
             const messageDiv = document.getElementById('message');
@@ -455,7 +681,7 @@
             if (normalizedInput) {
                 const character = characters[normalizedInput];
                 let html = `
-                    <div style="font-size: 50px; margin-bottom: 15px; filter: drop-shadow(0 0 20px currentColor);">${character.emoji}</div>
+                    <div style="font-size: clamp(40px, 10vw, 50px); margin-bottom: 15px; filter: drop-shadow(0 0 20px currentColor);">${character.emoji}</div>
                     <strong>${normalizedInput}</strong>
                     <div style="margin-top: 10px;">${character.message}</div>
                 `;
@@ -468,11 +694,23 @@
                 messageDiv.className = 'message success';
                 messageDiv.innerHTML = html;
                 redirectMessageDiv.style.display = 'none';
+                
+                // Запускаем салюты при правильном ответе
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        createFirework();
+                    }, i * 300);
+                }
+                
+                // Специальная проверка для "Деда Гоблин"
+                if (normalizedInput === "Деда Гоблин") {
+                    createFlyingEmojis();
+                }
             } else {
                 messageDiv.className = 'message error';
                 messageDiv.innerHTML = `
-                    <div style="font-size: 40px; margin-bottom: 15px;">❌</div>
-                    <strong style="font-size: 28px;">Ты долбоёб!</strong>
+                    <div style="font-size: clamp(30px, 8vw, 40px); margin-bottom: 15px;">❌</div>
+                    <strong style="font-size: clamp(20px, 6vw, 28px;">Ты долбоёб!</strong>
                     <div style="margin-top: 10px;">Попробуй еще раз или ливай нахуй!</div>
                 `;
                 redirectMessageDiv.style.display = 'none';
@@ -511,6 +749,12 @@
         }
 
         setInterval(createSparkle, 500);
+
+        // Обновляем размеры при изменении окна
+        window.addEventListener('resize', () => {
+            // Пересчет размеров для адаптивности
+            document.body.style.padding = window.innerHeight < 600 ? '10px' : '20px';
+        });
     </script>
 </body>
 </html>
