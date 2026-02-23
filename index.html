@@ -5,139 +5,363 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Конкурс для гильдии</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0f0c1f 0%, #1a142f 50%, #2d1b3a 100%);
             min-height: 100vh;
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
+            position: relative;
+            overflow-x: hidden;
         }
+
+        /* Анимированные звезды на фоне */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(2px 2px at 20px 30px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 80px 120px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 160px 50px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 300px 200px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 450px 150px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(3px 3px at 500px 400px, #ffd700, rgba(0,0,0,0)),
+                        radial-gradient(3px 3px at 700px 300px, #b19cd9, rgba(0,0,0,0));
+            background-size: 200px 200px;
+            background-repeat: repeat;
+            opacity: 0.3;
+            animation: stars 200s linear infinite;
+        }
+
+        @keyframes stars {
+            from { transform: translateY(0); }
+            to { transform: translateY(-200px); }
+        }
+
         .container {
-            background-color: rgba(255, 255, 255, 0.95);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            background: rgba(20, 15, 35, 0.85);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 45px;
+            border-radius: 40px;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.7),
+                       0 0 0 2px rgba(155, 93, 229, 0.3) inset,
+                       0 0 30px rgba(155, 93, 229, 0.3);
             text-align: center;
-            max-width: 500px;
+            max-width: 550px;
             width: 90%;
-            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: glowPulse 3s infinite;
         }
+
+        @keyframes glowPulse {
+            0% { box-shadow: 0 30px 70px rgba(0, 0, 0, 0.7), 0 0 0 2px rgba(155, 93, 229, 0.3) inset, 0 0 30px rgba(155, 93, 229, 0.3); }
+            50% { box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8), 0 0 0 3px rgba(188, 143, 254, 0.5) inset, 0 0 50px rgba(188, 143, 254, 0.5); }
+            100% { box-shadow: 0 30px 70px rgba(0, 0, 0, 0.7), 0 0 0 2px rgba(155, 93, 229, 0.3) inset, 0 0 30px rgba(155, 93, 229, 0.3); }
+        }
+
+        .character-icon {
+            font-size: 70px;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 20px rgba(155, 93, 229, 0.7));
+            animation: floatIcon 3s ease-in-out infinite;
+        }
+
+        @keyframes floatIcon {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
         h2 {
-            color: #333;
-            margin-bottom: 30px;
-            font-size: 28px;
+            color: #fff;
+            margin-bottom: 15px;
+            font-size: 32px;
+            text-shadow: 0 0 20px rgba(155, 93, 229, 0.5),
+                        0 0 40px rgba(155, 93, 229, 0.3);
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #fff, #b19cd9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
         }
+
         .subtitle {
-            color: #666;
-            margin-bottom: 25px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 30px;
             font-style: italic;
+            font-size: 18px;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            position: relative;
         }
+
+        .subtitle::before,
+        .subtitle::after {
+            content: '"';
+            font-size: 24px;
+            color: #b19cd9;
+            opacity: 0.5;
+        }
+
         input {
             width: 100%;
-            padding: 15px;
-            margin: 10px 0 20px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
+            padding: 18px 20px;
+            margin: 10px 0 25px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(155, 93, 229, 0.3);
+            border-radius: 50px;
             font-size: 16px;
             box-sizing: border-box;
-            transition: border-color 0.3s;
+            transition: all 0.3s ease;
+            color: #fff;
+            font-weight: 400;
+            letter-spacing: 0.5px;
         }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+            font-style: italic;
+        }
+
         input:focus {
             outline: none;
-            border-color: #764ba2;
+            border-color: #b19cd9;
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 30px rgba(155, 93, 229, 0.4),
+                       0 0 0 3px rgba(155, 93, 229, 0.2) inset;
+            transform: scale(1.02);
         }
+
         button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #6b46c1 0%, #9b5de5 50%, #b983ff 100%);
             color: white;
-            padding: 15px 30px;
+            padding: 18px 30px;
             border: none;
-            border-radius: 10px;
+            border-radius: 50px;
             cursor: pointer;
             width: 100%;
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 600;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(155, 93, 229, 0.4);
         }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.7s;
+        }
+
         button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(155, 93, 229, 0.6);
+            background: linear-gradient(135deg, #7b56d1 0%, #ad6df5 50%, #c993ff 100%);
         }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        button:active {
+            transform: translateY(0) scale(0.98);
+        }
+
         .message {
-            margin-top: 25px;
-            padding: 20px;
-            border-radius: 10px;
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 30px;
             display: none;
             font-size: 18px;
-            line-height: 1.6;
-            animation: fadeIn 0.5s;
+            line-height: 1.7;
+            animation: slideIn 0.5s ease-out;
+            position: relative;
+            overflow: hidden;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
+
         .success {
-            background: linear-gradient(135deg, #f6f9fc 0%, #e6f7e6 100%);
-            color: #2c662d;
-            border: 2px solid #2c662d;
+            background: linear-gradient(135deg, rgba(44, 102, 45, 0.2), rgba(72, 140, 73, 0.1));
+            color: #e0ffe0;
+            border: 2px solid rgba(114, 255, 114, 0.3);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 30px rgba(114, 255, 114, 0.2);
         }
+
         .error {
-            background: linear-gradient(135deg, #fff5f5 0%, #ffe6e6 100%);
-            color: #9f3a38;
-            border: 2px solid #9f3a38;
+            background: linear-gradient(135deg, rgba(159, 58, 56, 0.2), rgba(200, 80, 80, 0.1));
+            color: #ffd1d1;
+            border: 2px solid rgba(255, 107, 107, 0.3);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 30px rgba(255, 107, 107, 0.2);
         }
-        .character-icon {
-            font-size: 50px;
-            margin-bottom: 10px;
-        }
+
         .hint {
-            margin-top: 20px;
-            color: #999;
-            font-size: 14px;
+            margin-top: 25px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 15px;
+            cursor: help;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
+
+        .hint:hover {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .hint span {
+            animation: twinkle 1.5s infinite;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+
         .redirect-message {
-            margin-top: 15px;
-            font-size: 16px;
-            color: #667eea;
+            margin-top: 20px;
+            font-size: 18px;
+            color: #b19cd9;
             font-weight: bold;
             animation: pulse 1.5s infinite;
+            text-shadow: 0 0 15px rgba(155, 93, 229, 0.5);
         }
+
         @keyframes pulse {
-            0% { opacity: 0.6; }
-            50% { opacity: 1; }
-            100% { opacity: 0.6; }
+            0% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+            100% { opacity: 0.6; transform: scale(1); }
         }
+
         .extra-field {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 2px dashed #764ba2;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px dashed rgba(155, 93, 229, 0.5);
             font-style: italic;
-            color: #555;
+            color: rgba(255, 255, 255, 0.9);
             font-size: 16px;
+            position: relative;
         }
+
         .music-notes {
             font-family: 'Courier New', monospace;
             white-space: pre-line;
-            background: rgba(102, 126, 234, 0.1);
-            padding: 10px;
-            border-radius: 8px;
-            margin-top: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 20px;
+            margin-top: 15px;
+            color: #b19cd9;
+            border: 1px solid rgba(155, 93, 229, 0.3);
+            font-size: 15px;
+            line-height: 1.8;
+            text-shadow: 0 0 5px rgba(155, 93, 229, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .message strong {
+            font-size: 24px;
+            display: block;
+            margin-bottom: 15px;
+            color: #fff;
+            text-shadow: 0 0 15px rgba(155, 93, 229, 0.5);
+        }
+
+        /* Декоративные элементы */
+        .glow {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(155, 93, 229, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .glow-1 {
+            top: -100px;
+            left: -100px;
+            animation: glowMove 15s infinite alternate;
+        }
+
+        .glow-2 {
+            bottom: -100px;
+            right: -100px;
+            animation: glowMove 20s infinite alternate-reverse;
+        }
+
+        @keyframes glowMove {
+            from { transform: translate(0, 0) scale(1); }
+            to { transform: translate(50px, 50px) scale(1.2); }
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: sparkle 2s infinite;
+        }
+
+        @keyframes sparkle {
+            0% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0); }
         }
     </style>
 </head>
 <body>
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+    
     <div class="container">
         <div class="character-icon">🎭</div>
         <h2>Введите предположение</h2>
-        <div class="subtitle">"Думайте, мои хорошие, думайте"</div>
+        <div class="subtitle">Думайте, мои хорошие, думайте</div>
         
         <input type="text" id="passwordInput" placeholder="Например: Деда Гоблин..." autocomplete="off">
         <button onclick="checkPassword()">Проверить</button>
         
         <div id="message" class="message"></div>
         <div id="redirectMessage" class="redirect-message" style="display: none;"></div>
-        <div class="hint">⭐ Подсказка: ага, захотели.</div>
+        <div class="hint">
+            <span>⭐</span> Подсказка: ага, захотели. <span>⭐</span>
+        </div>
     </div>
 
     <script>
@@ -231,9 +455,9 @@
             if (normalizedInput) {
                 const character = characters[normalizedInput];
                 let html = `
-                    <div style="font-size: 40px; margin-bottom: 10px;">${character.emoji}</div>
-                    <strong>${normalizedInput}</strong><br>
-                    ${character.message}
+                    <div style="font-size: 50px; margin-bottom: 15px; filter: drop-shadow(0 0 20px currentColor);">${character.emoji}</div>
+                    <strong>${normalizedInput}</strong>
+                    <div style="margin-top: 10px;">${character.message}</div>
                 `;
                 
                 // Добавляем дополнительное поле, если оно существует
@@ -247,9 +471,9 @@
             } else {
                 messageDiv.className = 'message error';
                 messageDiv.innerHTML = `
-                    <div style="font-size: 30px; margin-bottom: 10px;">❌</div>
-                    <strong>Ты долбоёб!</strong><br>
-                    Попробуй еще раз или ливай нахуй!
+                    <div style="font-size: 40px; margin-bottom: 15px;">❌</div>
+                    <strong style="font-size: 28px;">Ты долбоёб!</strong>
+                    <div style="margin-top: 10px;">Попробуй еще раз или ливай нахуй!</div>
                 `;
                 redirectMessageDiv.style.display = 'none';
             }
@@ -271,6 +495,22 @@
                 document.querySelector('.container').style.opacity = '1';
             }, 100);
         });
+
+        // Создаем мерцающие звездочки
+        function createSparkle() {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.left = Math.random() * 100 + '%';
+            sparkle.style.top = Math.random() * 100 + '%';
+            sparkle.style.animationDelay = Math.random() * 2 + 's';
+            document.body.appendChild(sparkle);
+            
+            setTimeout(() => {
+                sparkle.remove();
+            }, 2000);
+        }
+
+        setInterval(createSparkle, 500);
     </script>
 </body>
 </html>
