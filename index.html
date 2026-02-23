@@ -3,92 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Проверка пароля</title>
+    <title>Проверка имени персонажа</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
         }
         .container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             text-align: center;
-            max-width: 400px;
-            width: 100%;
+            max-width: 450px;
+            width: 90%;
+            backdrop-filter: blur(10px);
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 25px;
+            font-style: italic;
         }
         input {
             width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
             box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #764ba2;
         }
         button {
-            background-color: #4CAF50;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 12px 20px;
+            padding: 15px 30px;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             cursor: pointer;
             width: 100%;
-            font-size: 16px;
+            font-size: 18px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
         button:hover {
-            background-color: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
         }
         .message {
-            margin-top: 20px;
-            padding: 10px;
-            border-radius: 5px;
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 10px;
             display: none;
+            font-size: 18px;
+            line-height: 1.6;
+            animation: fadeIn 0.5s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+            background: linear-gradient(135deg, #f6f9fc 0%, #e6f7e6 100%);
+            color: #2c662d;
+            border: 2px solid #2c662d;
         }
         .error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe6e6 100%);
+            color: #9f3a38;
+            border: 2px solid #9f3a38;
+        }
+        .character-icon {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+        .hint {
+            margin-top: 20px;
+            color: #999;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="character-icon">🎭</div>
         <h2>Введите имя персонажа</h2>
-        <input type="text" id="passwordInput" placeholder="Введите пароль...">
+        <div class="subtitle">"Только настоящие фанаты знают код"</div>
+        
+        <input type="text" id="passwordInput" placeholder="Например: Кирито..." autocomplete="off">
         <button onclick="checkPassword()">Проверить</button>
+        
         <div id="message" class="message"></div>
+        <div class="hint">⭐ Подсказка: имена из аниме, дорамы и игр</div>
     </div>
 
     <script>
-        const passwords = {
-            "Гарри Поттер": "Добро пожаловать в Хогвартс, Гарри!",
-            "Гермиона Грейнджер": "Самая умная ведьма своего возраста!",
-            "Рон Уизли": "Ты настоящий друг, Рон!",
-            "Дамблдор": "Мудрейший директор Хогвартса!",
-            // Добавьте свои пароли и сообщения
+        // База данных персонажей и их сообщений
+        const characters = {
+            "Уриель": {
+                message: "✨ Архангел света! Ты обладаешь божественной силой и мудростью. Добро пожаловать, небесный воин!",
+                emoji: "👼"
+            },
+            "Ким Докча": {
+                message: "📖 'Поклонник, читающий роман' - ты главный герой своей истории! Продолжай читать и выживать!",
+                emoji: "📚"
+            },
+            "Ю Джунхек": {
+                message: "⚔️ Пророк выживания! Твой путь полон испытаний, но ты всегда находишь правильное решение.",
+                emoji: "🗡️"
+            },
+            "Азик Эггерс": {
+                message: "🎪 Король азарта и удачи! Пусть фортуна всегда будет на твоей стороне!",
+                emoji: "🎲"
+            },
+            "Каттлея": {
+                message: "🌸 Прекрасная и загадочная, как цветок орхидеи. Твоя красота затмевает звезды!",
+                emoji: "🌺"
+            },
+            "Чха Хёнсу": {
+                message: "💪 Непобедимый регрессор! Сила и решимость - твои верные спутники!",
+                emoji: "🔥"
+            },
+            "Кирито": {
+                message: "⚡ Чёрный мечник! Твоё мастерство владения мечом не знает равных в виртуальном мире!",
+                emoji: "⚔️"
+            }
         };
 
         function checkPassword() {
             const input = document.getElementById('passwordInput').value.trim();
             const messageDiv = document.getElementById('message');
             
-            if (passwords[input]) {
+            // Нормализация ввода (убираем лишние пробелы, приводим к правильному регистру)
+            // Но оставляем возможность ввода в любом регистре
+            const normalizedInput = Object.keys(characters).find(
+                name => name.toLowerCase() === input.toLowerCase()
+            );
+            
+            if (normalizedInput) {
+                const character = characters[normalizedInput];
                 messageDiv.className = 'message success';
-                messageDiv.textContent = passwords[input];
+                messageDiv.innerHTML = `
+                    <div style="font-size: 40px; margin-bottom: 10px;">${character.emoji}</div>
+                    <strong>${normalizedInput}</strong><br>
+                    ${character.message}
+                `;
+                
+                // Добавляем спецэффект для особых персонажей
+                if (normalizedInput === "Кирито") {
+                    messageDiv.innerHTML += "<br><br>⚔️ <em>Starburst Stream!</em>";
+                } else if (normalizedInput === "Ким Докча") {
+                    messageDiv.innerHTML += "<br><br>📖 <em>Три способа выжить в разрушенном мире...</em>";
+                }
             } else {
                 messageDiv.className = 'message error';
-                messageDiv.textContent = 'Неверный пароль!';
+                messageDiv.innerHTML = `
+                    <div style="font-size: 30px; margin-bottom: 10px;">❌</div>
+                    <strong>Неверное имя персонажа!</strong><br>
+                    Попробуйте еще раз...
+                `;
             }
             messageDiv.style.display = 'block';
         }
@@ -98,6 +185,15 @@
             if (e.key === 'Enter') {
                 checkPassword();
             }
+        });
+
+        // Добавляем эффект плавного появления
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('.container').style.opacity = '0';
+            setTimeout(() => {
+                document.querySelector('.container').style.transition = 'opacity 1s';
+                document.querySelector('.container').style.opacity = '1';
+            }, 100);
         });
     </script>
 </body>
