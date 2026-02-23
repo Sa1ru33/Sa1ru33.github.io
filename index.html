@@ -102,7 +102,7 @@
     <div class="container">
         <div class="character-icon">🎭</div>
         <h2>Введите предположение</h2>
-        <div class="subtitle">"Внимательно"</div>
+        <div class="subtitle">"Думайте, мои хорошие, думайте"</div>
         
         <input type="text" id="passwordInput" placeholder="Например: Деда Гоблин..." autocomplete="off">
         <button onclick="checkPassword()">Проверить</button>
@@ -151,9 +151,6 @@
         function checkPassword() {
             const input = document.getElementById('passwordInput').value.trim();
             const messageDiv = document.getElementById('message');
-            
-            // Нормализация ввода (убираем лишние пробелы, приводим к правильному регистру)
-            // Но оставляем возможность ввода в любом регистре
             const normalizedInput = Object.keys(characters).find(
                 name => name.toLowerCase() === input.toLowerCase()
             );
@@ -167,18 +164,12 @@
                     ${character.message}
                 `;
                 
-                // Добавляем спецэффект для особых персонажей
-                if (normalizedInput === "Кирито") {
-                    messageDiv.innerHTML += "<br><br>⚔️ <em>Starburst Stream!</em>";
-                } else if (normalizedInput === "Ким Докча") {
-                    messageDiv.innerHTML += "<br><br>📖 <em>Три способа выжить в разрушенном мире...</em>";
-                }
             } else {
                 messageDiv.className = 'message error';
                 messageDiv.innerHTML = `
                     <div style="font-size: 30px; margin-bottom: 10px;">❌</div>
-                    <strong>Неверное имя персонажа!</strong><br>
-                    Попробуйте еще раз...
+                    <strong>Ты долбоёб!</strong><br>
+                    Попробуй еще раз или ливай нахуй!
                 `;
             }
             messageDiv.style.display = 'block';
