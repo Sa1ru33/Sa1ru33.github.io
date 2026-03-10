@@ -469,8 +469,13 @@
         // База данных персонажей и их сообщений
         const characters = {
             "Деда Гоблин": {
-                message: "Не дом, а строят, Не холст, а рисуют, Не город, а каждый в нём что-то создаёт. Один пиксель — как кирпичик, И весь мир из точек растёт.",
-                emoji: "🌍",
+                message: "Деда мы поздравляем с прошедшим 8 марта.",
+                emoji: "💋",
+                extra: null
+            },
+            "Предположение": {
+                message: "А ты хорош, но нет).",
+                emoji: "εつ▄█▀█🥵",
                 extra: null
             },
             "Уриель": {
@@ -565,18 +570,6 @@
                 name => name.toLowerCase() === input.toLowerCase()
             );
             
-            // Специальная проверка для "wplace"
-            if (input.toLowerCase() === "wplace") {
-                messageDiv.style.display = 'none';
-                redirectMessageDiv.style.display = 'block';
-                redirectMessageDiv.innerHTML = '🔗 Перенаправление на wplace...';
-                
-                setTimeout(() => {
-                    window.location.href = "https://wplace.live"; 
-                }, 1500);
-                return;
-            }
-            
             if (normalizedInput) {
                 const character = characters[normalizedInput];
                 let html = `
@@ -596,8 +589,8 @@
                 messageDiv.className = 'message error';
                 messageDiv.innerHTML = `
                     <div class="message-icon" style="font-size: 40px;">❌</div>
-                    <strong style="font-size: 24px;">Ты долбоёб!</strong>
-                    <div style="margin-top: 12px; font-weight: 300;">Попробуй еще раз или ливай нахуй!</div>
+                    <strong style="font-size: 24px;">Неправильно!</strong>
+                    <div style="margin-top: 12px; font-weight: 300;">Попробуй еще раз или ливай н****!</div>
                 `;
                 redirectMessageDiv.style.display = 'none';
             }
