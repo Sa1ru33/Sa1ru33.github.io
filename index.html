@@ -1,1 +1,749 @@
-Hello World!!!
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конкурс для гильдии</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(145deg, #0a0a14 0%, #13111c 50%, #1a1724 100%);
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow-x: hidden;
+            padding: 24px;
+            color: #ffffff;
+        }
+
+        /* Текстура фона */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(120, 90, 200, 0.08) 0%, transparent 30%),
+                radial-gradient(circle at 80% 70%, rgba(140, 110, 220, 0.08) 0%, transparent 35%),
+                radial-gradient(circle at 40% 80%, rgba(100, 80, 180, 0.06) 0%, transparent 40%),
+                radial-gradient(circle at 70% 20%, rgba(160, 130, 240, 0.06) 0%, transparent 35%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            background: rgba(20, 18, 30, 0.65);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            padding: clamp(24px, 5vw, 48px);
+            border-radius: clamp(28px, 4vw, 40px);
+            box-shadow: 
+                0 30px 60px -15px rgba(0, 0, 0, 0.8),
+                0 0 0 1px rgba(255, 255, 255, 0.06) inset,
+                0 0 0 1px rgba(140, 110, 220, 0.15);
+            text-align: center;
+            max-width: min(560px, 95%);
+            width: 100%;
+            position: relative;
+            z-index: 10;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            border: none;
+        }
+
+        .character-icon {
+            font-size: clamp(44px, 10vw, 64px);
+            margin-bottom: 16px;
+            filter: drop-shadow(0 8px 20px rgba(120, 90, 200, 0.3));
+            animation: subtleFloat 6s ease-in-out infinite;
+            opacity: 0.95;
+        }
+
+        @keyframes subtleFloat {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+            100% { transform: translateY(0px); }
+        }
+
+        h2 {
+            color: #ffffff;
+            margin-bottom: 8px;
+            font-size: clamp(28px, 6vw, 36px);
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            color: rgba(220, 215, 245, 0.7);
+            margin-bottom: 32px;
+            font-style: normal;
+            font-weight: 400;
+            font-size: clamp(16px, 4vw, 18px);
+            letter-spacing: 0.02em;
+            position: relative;
+            line-height: 1.5;
+        }
+
+        .subtitle::before,
+        .subtitle::after {
+            content: '“';
+            font-size: 20px;
+            color: rgba(180, 150, 255, 0.5);
+            font-family: Georgia, serif;
+            margin: 0 4px;
+        }
+
+        .subtitle::after {
+            content: '”';
+        }
+
+        .input-group {
+            position: relative;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 18px 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1.5px solid rgba(180, 150, 255, 0.2);
+            border-radius: 60px;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+            color: #ffffff;
+            font-weight: 400;
+            letter-spacing: 0.01em;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        input::placeholder {
+            color: rgba(220, 215, 245, 0.4);
+            font-weight: 300;
+            font-size: 15px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: rgba(180, 150, 255, 0.6);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 0 3px rgba(180, 150, 255, 0.1);
+            transform: scale(1.01);
+        }
+
+        button {
+            background: linear-gradient(135deg, rgba(140, 110, 220, 0.9), rgba(120, 90, 200, 0.9));
+            color: white;
+            padding: 18px 28px;
+            border: none;
+            border-radius: 60px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 18px;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            letter-spacing: 0.03em;
+            box-shadow: 0 10px 25px -5px rgba(100, 70, 170, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.4s;
+            transform: scale(0.5);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 18px 30px -5px rgba(120, 90, 200, 0.6);
+            background: linear-gradient(135deg, rgba(150, 120, 230, 0.95), rgba(130, 100, 210, 0.95));
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        button:hover::after {
+            opacity: 1;
+        }
+
+        button:active {
+            transform: translateY(1px);
+            box-shadow: 0 8px 15px -5px rgba(120, 90, 200, 0.5);
+        }
+
+        .message {
+            margin-top: 32px;
+            border-radius: 28px;
+            display: none;
+            font-size: 17px;
+            line-height: 1.6;
+            animation: fadeScale 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+            position: relative;
+            overflow: hidden;
+            max-height: 70vh;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(180, 150, 255, 0.4) rgba(255, 255, 255, 0.05);
+        }
+
+        .message::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .message::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .message::-webkit-scrollbar-thumb {
+            background: rgba(180, 150, 255, 0.4);
+            border-radius: 10px;
+        }
+
+        @keyframes fadeScale {
+            0% {
+                opacity: 0;
+                transform: scale(0.96);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .success {
+            background: rgba(30, 28, 45, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: #f0f0ff;
+            border: 1px solid rgba(140, 110, 220, 0.4);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(140, 110, 220, 0.2) inset;
+            padding: 28px;
+        }
+
+        .error {
+            background: rgba(45, 30, 35, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: #ffebee;
+            border: 1px solid rgba(255, 140, 140, 0.3);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 140, 140, 0.15) inset;
+            padding: 28px;
+        }
+
+        .hint {
+            margin-top: 24px;
+            color: rgba(220, 215, 245, 0.35);
+            font-size: 15px;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            letter-spacing: 0.02em;
+            transition: color 0.2s;
+        }
+
+        .hint:hover {
+            color: rgba(220, 215, 245, 0.6);
+        }
+
+        .hint span {
+            opacity: 0.6;
+            font-size: 16px;
+        }
+
+        .redirect-message {
+            margin-top: 24px;
+            font-size: 17px;
+            color: rgba(180, 150, 255, 0.9);
+            font-weight: 500;
+            animation: softPulse 2s infinite;
+            text-shadow: 0 2px 10px rgba(120, 90, 200, 0.3);
+            padding: 8px 16px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 40px;
+            display: inline-block;
+            backdrop-filter: blur(5px);
+        }
+
+        @keyframes softPulse {
+            0% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.02); }
+            100% { opacity: 0.7; transform: scale(1); }
+        }
+
+        .extra-field {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(180, 150, 255, 0.25);
+            font-style: normal;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+            position: relative;
+            font-weight: 400;
+        }
+
+        .music-notes {
+            font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace;
+            white-space: pre-line;
+            background: rgba(10, 8, 18, 0.6);
+            padding: 18px;
+            border-radius: 20px;
+            margin-top: 16px;
+            color: #c9b8ff;
+            border: 1px solid rgba(180, 150, 255, 0.2);
+            font-size: 15px;
+            line-height: 1.8;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            word-break: break-word;
+            backdrop-filter: blur(5px);
+        }
+
+        .message strong {
+            font-size: clamp(22px, 5vw, 26px);
+            display: block;
+            margin-bottom: 16px;
+            color: #ffffff;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            text-shadow: 0 2px 10px rgba(140, 110, 220, 0.4);
+        }
+
+        .message-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 8px 18px rgba(140, 110, 220, 0.4));
+            opacity: 0.95;
+        }
+
+        /* Мягкое свечение по краям */
+        .glow {
+            position: fixed;
+            width: min(400px, 70vw);
+            height: min(400px, 70vw);
+            background: radial-gradient(circle, rgba(120, 90, 200, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(40px);
+        }
+
+        .glow-1 {
+            top: -150px;
+            left: -150px;
+            animation: slowShift 20s infinite alternate;
+        }
+
+        .glow-2 {
+            bottom: -150px;
+            right: -150px;
+            animation: slowShift 25s infinite alternate-reverse;
+        }
+
+        @keyframes slowShift {
+            from { transform: translate(0, 0) scale(1); }
+            to { transform: translate(min(60px, 5vw), min(60px, 5vw)) scale(1.1); }
+        }
+
+        /* Минималистичные частицы */
+        .particle {
+            position: fixed;
+            width: 2px;
+            height: 2px;
+            background: rgba(200, 180, 255, 0.3);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particleFloat 8s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes particleFloat {
+            0% { transform: translateY(0) translateX(0); opacity: 0; }
+            10% { opacity: 0.5; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-100px) translateX(20px); opacity: 0; }
+        }
+
+        /* Видео контейнер */
+        .video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+        }
+
+        .video-container.active {
+            display: flex;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+        }
+
+        .video-wrapper video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .close-video {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 24px;
+            color: white;
+            z-index: 1001;
+            transition: all 0.3s ease;
+        }
+
+        .close-video:hover {
+            background: rgba(255, 80, 80, 0.8);
+            transform: scale(1.1);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Медиа-запросы */
+        @media (max-width: 480px) {
+            body {
+                padding: 16px;
+            }
+            
+            .container {
+                padding: 24px;
+            }
+            
+            .message {
+                padding: 20px;
+            }
+
+            .video-wrapper {
+                width: 95%;
+                border-radius: 20px;
+            }
+        }
+
+        @media (max-height: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .character-icon {
+                font-size: 40px;
+                margin-bottom: 8px;
+            }
+            
+            h2 {
+                font-size: 24px;
+                margin-bottom: 4px;
+            }
+            
+            .subtitle {
+                margin-bottom: 20px;
+            }
+            
+            .message {
+                max-height: 50vh;
+            }
+        }
+
+        /* Плавное появление */
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+    <!-- Подключаем шрифт Inter для чистой типографики -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+    
+    <div class="container fade-in">
+        <div class="character-icon">🎭</div>
+        <h2>Введите предположение</h2>
+        <div class="subtitle">Думайте, мои хорошие, думайте</div>
+        
+        <div class="input-group">
+            <input type="text" id="passwordInput" placeholder="Например: Деда Гоблин..." autocomplete="off">
+        </div>
+        
+        <button onclick="checkPassword()">Проверить</button>
+        
+        <div id="message" class="message"></div>
+        <div id="redirectMessage" class="redirect-message" style="display: none;"></div>
+        
+        <div class="hint">
+            <span>✦</span> Подсказка: ага, захотели. <span>✦</span>
+        </div>
+    </div>
+
+    <!-- Видео контейнер для "Предположение" -->
+    <div id="videoContainer" class="video-container">
+        <div class="video-wrapper">
+            <div class="close-video" onclick="closeVideo()">✕</div>
+            <video id="specialVideo" controls autoplay>
+                <source src="rickroll.mp4" type="video/mp4">
+                <!-- Запасной вариант если видео не загрузится -->
+                <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                Ваш браузер не поддерживает видео.
+            </video>
+        </div>
+    </div>
+
+    <script>
+        // База данных персонажей и их сообщений
+        const characters = {
+            "Деда Гоблин": {
+                message: "Деда мы поздравляем с прошедшим 8 марта.",
+                emoji: "💋",
+                extra: null
+            },
+            "Предположение": {
+                message: "А ты хорош, но нет).",
+                emoji: "εつ▄█▀█🥵",
+                extra: null,
+                playVideo: true // Специальный флаг для проигрывания видео
+            },
+            "Уриель": {
+                message: "Твоя вера в героев способна зажечь даже самое тёмное небо.",
+                emoji: "👼",
+                extra: `<div class="music-notes"> До-Ля Фа-Фа Ре До-Ми До-Ля До 
+                До-Ми Ре-Соль Ре-Ля Ре-Ре Ре-Фа До-Ми Ля 
+                Ре-Ре 
+                Фа Ля Ре-Фа Ре-Ре Фа-Соль Ми-Ре 
+                Ре-Ля До До-Соль 
+                Ре-Соль До-Ми До-Ля Фа-Ре Ре-До Ре-Ре</div>`
+            },
+            "Ким Докча": {
+                message: "Ты главный герой своей истории! Продолжай читать и выживать!",
+                emoji: "📚",
+                extra: `<div class="music-notes"> Ре-Соль Ре-До Ре-Ре Ми До 
+                        Ми-Фа До-Ми Ре-Ля До До-Ля 
+                        Фа-Ми Ре-Ля Ре-Си 
+                        До-Соль Ре-До До-Ми Фа Ре-Си</div>`
+            },
+            "Ю Джунхек": {
+                message: "Твой путь полон испытаний, но ты всегда находишь правильное решение.",
+                emoji: "💫",
+                extra: `<div class="music-notes"> Ре Ля Ре-Соль До-Соль Ре-Ре Ре-До Ля Ми-Фа Ре-До Ре-Ре 
+                        Ми Ре-Ре До-Ре Ми Ре-Фа До Ми-Ля До До-Ля Ре-Соль Фа-Соль 
+                        Ре-До До До-Ре До Соль</div>`
+            },
+            "Азик Эггерс": {
+                message: "Даже сквозь века ты сохраняешь спокойствие и скрываешь больше, чем показываешь.",
+                emoji: "⌛",
+                extra: `<div class="music-notes"> Ми-Ре Ре-Фа До Ре-До До-Ми До-Ля 
+                        Соль Ре-Фа Ля Ми Ре-До До-Ми Ля 
+                        Ре-Ля До До-Фа Ре-До Фа-До 
+                        Ре-Соль Ре-Си Ре-Си До-Ля Фа-До Ре До-Соль Ре-Ре До-Фа</div>`
+            },
+            "Каттлея": {
+                message: "Твоя жажда знаний ведёт тебя вперёд, несмотря на страх и сомнения.",
+                emoji: "🌺",
+                extra: `<div class="music-notes"> До-Ми Ре-Соль До-Соль До До-Ля До 
+                        До-Ре Ре-До До Ре-До До-Ми Фа-Соль 
+                        Соль До До-До Ля 
+                        Ля Ре-Соль До-Ля До-Ми</div>`
+            },
+            "Чха Хёнсу": {
+                message: "Ты борешься не только с монстрами, но и с самим собой — и это делает тебя сильнее",
+                emoji: "💪",
+                extra: `<div class="music-notes"> Ре Ре-Ре Фа-Соль До-Ля Ре-Соль Фа-Соль 
+                        До-Ля Фа-Фа Соль Ля До-Фа 
+                        Ре Ре-Ре До-Ля Фа-Ре Ми-Соль Ля 
+                        До-Си Ре-Ре Ре-До Ре-Соль Ре-Ля Ре-Фа Ре-Ре Ми</div>`
+            },
+            "Кирито": {
+                message: "В любом мире ты остаёшься мечом, который защищает тех, кто дорог.",
+                emoji: "⚔️",
+                extra: `<div class="music-notes"> Ре-Соль Ре-Фа До До-До До До-Ля Ре-Соль Фа-Соль 
+                        Ми 
+                        Ми До-Ми Ре-Фа Ре-Ля Ре-Си До До-Ля Фа-Ре Ре-До Фа-До Ми-Ре 
+                        До-Си До-Ми Ре-Фа До Ми-Ре</div>`
+            }
+        };
+
+        // Функция для создания мягких частиц
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 5 + 's';
+            particle.style.animationDuration = 6 + Math.random() * 8 + 's';
+            document.body.appendChild(particle);
+            
+            setTimeout(() => {
+                particle.remove();
+            }, 15000);
+        }
+
+        // Создаем несколько частиц при загрузке
+        for (let i = 0; i < 20; i++) {
+            setTimeout(() => {
+                createParticle();
+            }, i * 300);
+        }
+
+        // Продолжаем создавать частицы с интервалом
+        setInterval(createParticle, 3000);
+
+        // Функция для открытия видео
+        function openVideo() {
+            const videoContainer = document.getElementById('videoContainer');
+            const video = document.getElementById('specialVideo');
+            
+            videoContainer.classList.add('active');
+            video.play().catch(e => console.log('Автовоспроизведение не удалось:', e));
+            
+            // Блокируем прокрутку страницы
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Функция для закрытия видео
+        function closeVideo() {
+            const videoContainer = document.getElementById('videoContainer');
+            const video = document.getElementById('specialVideo');
+            
+            videoContainer.classList.remove('active');
+            video.pause();
+            video.currentTime = 0;
+            
+            // Возвращаем прокрутку
+            document.body.style.overflow = '';
+        }
+
+        // Закрытие по клику на фон
+        document.getElementById('videoContainer').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeVideo();
+            }
+        });
+
+        // Закрытие по Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeVideo();
+            }
+        });
+
+        function checkPassword() {
+            const input = document.getElementById('passwordInput').value.trim();
+            const messageDiv = document.getElementById('message');
+            const redirectMessageDiv = document.getElementById('redirectMessage');
+            const normalizedInput = Object.keys(characters).find(
+                name => name.toLowerCase() === input.toLowerCase()
+            );
+            
+            if (normalizedInput) {
+                const character = characters[normalizedInput];
+                let html = `
+                    <div class="message-icon">${character.emoji}</div>
+                    <strong>${normalizedInput}</strong>
+                    <div style="margin-top: 12px; font-weight: 300; letter-spacing: 0.01em;">${character.message}</div>
+                `;
+                
+                if (character.extra) {
+                    html += `<div class="extra-field">${character.extra}</div>`;
+                }
+                
+                messageDiv.className = 'message success';
+                messageDiv.innerHTML = html;
+                redirectMessageDiv.style.display = 'none';
+                
+                // Проверяем, нужно ли проиграть видео для этого персонажа
+                if (character.playVideo) {
+                    openVideo();
+                } else {
+                    // Если видео открыто от другого персонажа, закрываем его
+                    closeVideo();
+                }
+            } else {
+                messageDiv.className = 'message error';
+                messageDiv.innerHTML = `
+                    <div class="message-icon" style="font-size: 40px;">❌</div>
+                    <strong style="font-size: 24px;">Неправильно!</strong>
+                    <div style="margin-top: 12px; font-weight: 300;">Попробуй еще раз или ливай н****!</div>
+                `;
+                redirectMessageDiv.style.display = 'none';
+                
+                // Для неправильных ответов видео НЕ проигрывается
+                closeVideo(); // Закрываем видео если оно было открыто
+            }
+            messageDiv.style.display = 'block';
+        }
+
+        // Добавляем обработчик нажатия Enter
+        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+
+        // Плавное появление контейнера
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                document.querySelector('.container').style.opacity = '1';
+            }, 100);
+        });
+
+        // Обновляем размеры при изменении окна
+        window.addEventListener('resize', () => {
+            document.body.style.padding = window.innerHeight < 600 ? '12px' : '24px';
+        });
+    </script>
+</body>
+</html>
